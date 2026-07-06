@@ -18,7 +18,8 @@ import {
   Building2,
   Landmark,
   Facebook,
-  Instagram
+  Instagram,
+  Share2
 } from 'lucide-react';
 
 export interface Product {
@@ -34,6 +35,24 @@ export const PRODUCTS: Product[] = [
   { name: 'Pencils', desc: 'Premium quality wooden pencils.', img: 'https://res.cloudinary.com/dm3scoj2q/image/upload/v1782621544/WhatsApp_Image_2026-06-27_at_9.31.21_AM_1_p0lhnb.jpg' },
 ];
 
+const SHARE_URL = "https://manjushreenotebooks.com";
+const SHARE_TEXT = "Check out Manjushree Notebook Manufactures!";
+
+export const handleShare = (platform: string) => {
+  const encodedUrl = encodeURIComponent(SHARE_URL);
+  const encodedText = encodeURIComponent(SHARE_TEXT + " " + SHARE_URL);
+  
+  if (platform === 'whatsapp') {
+    window.open(`https://wa.me/?text=${encodedText}`, '_blank');
+  } else if (platform === 'facebook') {
+    window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodedUrl}`, '_blank');
+  } else if (platform === 'instagram') {
+    navigator.clipboard.writeText(SHARE_URL).then(() => {
+      alert('Website link copied to clipboard! You can now paste it on Instagram.');
+    });
+  }
+};
+
 const TopBar = () => (
   <div className="bg-[#051e42] text-white text-xs sm:text-sm py-2 px-4 md:px-12 flex flex-col sm:flex-row justify-between items-center gap-2">
     <div className="flex items-center gap-2 text-gray-200">
@@ -42,7 +61,7 @@ const TopBar = () => (
     </div>
     <div className="flex items-center gap-2 text-gray-200">
       <Phone size={16} />
-      <span>6002327566, 8486793153</span>
+      <span>+91 7086754384</span>
     </div>
   </div>
 );
@@ -85,9 +104,29 @@ const Navbar = ({ onSelectProduct }: { onSelectProduct: (p: Product) => void }) 
       <a href="#" className="hover:text-[#034b9e] transition-colors">Contact Us</a>
     </div>
 
-    <button className="hidden md:flex bg-[#053d87] hover:bg-[#042e66] text-white px-6 py-2.5 rounded font-semibold text-sm transition-colors">
-      Get A Quote
-    </button>
+    <div className="hidden md:flex items-center gap-6">
+      <div className="relative group">
+        <button className="flex items-center gap-1.5 text-[#053d87] hover:text-[#042e66] font-semibold text-sm transition-colors cursor-pointer">
+          <Share2 size={18} /> Share <ChevronDown size={14} strokeWidth={3} className="pt-0.5" />
+        </button>
+        <div className="absolute top-full right-0 mt-4 w-40 bg-white shadow-xl rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+          <div className="py-2">
+            <button onClick={() => handleShare('whatsapp')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+              <MessageCircle size={16} /> WhatsApp
+            </button>
+            <button onClick={() => handleShare('facebook')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+              <Facebook size={16} /> Facebook
+            </button>
+            <button onClick={() => handleShare('instagram')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+              <Instagram size={16} /> Instagram
+            </button>
+          </div>
+        </div>
+      </div>
+      <button className="bg-[#053d87] hover:bg-[#042e66] text-white px-6 py-2.5 rounded font-semibold text-sm transition-colors">
+        Get A Quote
+      </button>
+    </div>
   </nav>
 );
 
@@ -117,7 +156,7 @@ const Hero = () => (
               <Phone size={20} className="md:w-[22px] md:h-[22px]" />
             </div>
             <p className="text-base md:text-lg text-[#051e42] font-bold leading-snug">
-              6002327566<br />8486793153
+              +91 7086754384
             </p>
           </div>
         </div>
@@ -278,10 +317,10 @@ const CTA = () => (
         </p>
         
         <div className="flex flex-col sm:flex-row gap-3 md:gap-4 pt-4 md:pt-6 justify-center md:justify-start">
-          <button className="bg-white text-[#052b66] hover:bg-gray-100 px-6 py-3 md:px-8 md:py-3.5 rounded font-bold flex items-center justify-center gap-2 transition-colors">
+          <button onClick={() => window.open('tel:+917086754384')} className="bg-white text-[#052b66] hover:bg-gray-100 px-6 py-3 md:px-8 md:py-3.5 rounded font-bold flex items-center justify-center gap-2 transition-colors">
             Call Now <PhoneCall size={18} />
           </button>
-          <button className="bg-[#05408f] hover:bg-[#043373] text-white px-6 py-3 md:px-8 md:py-3.5 rounded font-bold flex items-center justify-center gap-2 transition-colors border border-blue-400/20">
+          <button onClick={() => window.open('https://wa.me/917086754384', '_blank')} className="bg-[#05408f] hover:bg-[#043373] text-white px-6 py-3 md:px-8 md:py-3.5 rounded font-bold flex items-center justify-center gap-2 transition-colors border border-blue-400/20">
             WhatsApp Us <MessageCircle size={18} />
           </button>
         </div>
@@ -348,9 +387,9 @@ const Footer = () => (
           Quality Note Book Creator's Wholesale Stationery and Not Book's. Your trusted partner for bulk notebook supply.
         </p>
         <div className="flex gap-5 pt-2">
-          <a href="#" className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><Facebook size={22} strokeWidth={1.5} /></a>
-          <a href="#" className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><Instagram size={22} strokeWidth={1.5} /></a>
-          <a href="#" className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><MessageCircle size={22} strokeWidth={1.5} /></a>
+          <button onClick={() => handleShare('facebook')} className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><Facebook size={22} strokeWidth={1.5} /></button>
+          <button onClick={() => handleShare('instagram')} className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><Instagram size={22} strokeWidth={1.5} /></button>
+          <button onClick={() => handleShare('whatsapp')} className="text-blue-100 hover:text-white transition-colors transform hover:scale-110"><MessageCircle size={22} strokeWidth={1.5} /></button>
         </div>
       </div>
 
@@ -363,7 +402,7 @@ const Footer = () => (
           </div>
           <div className="flex items-start gap-4">
             <Phone size={20} className="text-blue-300 mt-0.5 flex-shrink-0" />
-            <p className="text-sm text-blue-100/90 leading-relaxed">6002327566<br />8486793153</p>
+            <p className="text-sm text-blue-100/90 leading-relaxed">+91 7086754384</p>
           </div>
         </div>
       </div>
@@ -402,12 +441,33 @@ const ProductDetails = ({ product, onBack, onRequestBulkOrder }: { product: Prod
   return (
     <div className="bg-white py-8 md:py-24">
       <div className="max-w-7xl mx-auto px-4 md:px-12">
-        <button 
-          onClick={onBack}
-          className="mb-6 md:mb-8 flex items-center gap-2 text-[#034b9e] font-semibold hover:text-[#051e42] transition-colors text-sm md:text-base"
-        >
-          <ArrowRight className="rotate-180" size={18} /> Back to Products
-        </button>
+        <div className="flex items-center justify-between mb-6 md:mb-8">
+          <button 
+            onClick={onBack}
+            className="flex items-center gap-2 text-[#034b9e] font-semibold hover:text-[#051e42] transition-colors text-sm md:text-base"
+          >
+            <ArrowRight className="rotate-180" size={18} /> Back to Products
+          </button>
+          
+          <div className="relative group">
+            <button className="flex items-center gap-1.5 text-[#053d87] hover:text-[#042e66] font-semibold text-sm transition-colors cursor-pointer bg-blue-50 px-3 py-1.5 rounded-md">
+              <Share2 size={18} /> Share <ChevronDown size={14} strokeWidth={3} className="pt-0.5" />
+            </button>
+            <div className="absolute top-full right-0 mt-2 w-40 bg-white shadow-xl rounded-lg border border-gray-100 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-50">
+              <div className="py-2">
+                <button onClick={() => handleShare('whatsapp')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+                  <MessageCircle size={16} /> WhatsApp
+                </button>
+                <button onClick={() => handleShare('facebook')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+                  <Facebook size={16} /> Facebook
+                </button>
+                <button onClick={() => handleShare('instagram')} className="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-blue-50 hover:text-[#034b9e] transition-colors flex items-center gap-2">
+                  <Instagram size={16} /> Instagram
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
         <div className="flex flex-col md:flex-row gap-8 md:gap-12 items-center">
           <div className="flex-1 w-full flex justify-center bg-gray-50 p-6 md:p-8 rounded-2xl border border-gray-100 shadow-sm">
             <img src={product.img} alt={product.name} className="max-w-full max-h-[250px] md:max-h-[400px] object-contain mix-blend-multiply" />
@@ -466,7 +526,7 @@ const BulkOrderModal = ({
     if (formData.message) text += `Message: ${formData.message}\n`;
 
     const encodedText = encodeURIComponent(text);
-    window.open(`https://wa.me/918295637004?text=${encodedText}`, '_blank');
+    window.open(`https://wa.me/917086754384?text=${encodedText}`, '_blank');
     onClose();
   };
 
